@@ -31,6 +31,10 @@ int main(void)
     ISR_TIMER_StartEx(Custom_TIMER_ISR);
     timer_clock_Start();
     
+    Clock_PWM_Start();
+    PWM_RED_GREEN_Start();
+    PWM_BLUE_Start();
+    
     
     
     uint8 start_received = 0;
@@ -120,12 +124,18 @@ int main(void)
                 
             }
             
-            else if((blue_received) && (received == 0xC0) &&(flag))
+            else if((blue_received) && (received == 0xC0) &&(flag)&&(count_TIMER < 10))
             {
                 
+                Timer_Stop();
+                UART_PutString("Inserisci valore di Start\n");
                 stop_received ++;
                 blue_received = 0;
                 flag = 0;
+                
+                PWM_RED_GREEN_WriteCompare1(DC_GREEN);
+                PWM_RED_GREEN_WriteCompare2(DC_RED);
+                PWM_BLUE_WriteCompare(DC_BLUE);
                 
                 UART_PutChar(DC_RED);
                 
