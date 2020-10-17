@@ -12,14 +12,14 @@
 #include "InterruptRoutines.h"
 #include "stdio.h"
 #include "project.h"
-extern unsigned int flag;
+
+extern uint8 flag;
 extern uint8 count_TIMER;
 
 CY_ISR(Custom_UART_ISR)
 {
     if(UART_ReadRxStatus() == UART_RX_STS_FIFO_NOTEMPTY)
     {
-
         flag = 1;
     }
     

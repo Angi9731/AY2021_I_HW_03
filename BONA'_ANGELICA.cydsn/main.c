@@ -13,13 +13,13 @@
 #include "InterruptRoutines.h"
 #include "stdio.h"
 
-unsigned int flag = 0;
+uint8 flag = 0;
 uint8 count_TIMER = 0;
 
 
 int main(void)
 {
-    CyGlobalIntEnable; /* Enable global interrupts. */
+    CyGlobalIntEnable;
     
     uint8 received;
     uint8 DC_RED = 0;
@@ -50,15 +50,12 @@ int main(void)
 
     for(;;)
     {
-        if(count_TIMER >= 10)
+        if(count_TIMER >= 5)
             {
                 
                 UART_PutString("Troppo tardi! Inserisci valore di Start\n");
                 Timer_Stop();
                 count_TIMER = 0;
-                DC_RED = 0;
-                DC_GREEN = 0;
-                DC_BLUE = 0;
                 stop_received = 1;
             }
         
@@ -75,7 +72,7 @@ int main(void)
             else if((flag) && (received == 0xA0) && (stop_received))
             {
                
-               UART_PutString("Inserisci valore per ROSSO\n");
+               //UART_PutString("Inserisci valore per ROSSO\n");
                Timer_Start();
                count_TIMER = 0;
                start_received ++;
@@ -84,11 +81,11 @@ int main(void)
                
             }
             
-             else if((flag) && (start_received) && (count_TIMER < 10))
+             else if((flag) && (start_received) && (count_TIMER < 5))
             {
                 
                 DC_RED = received;
-                UART_PutString("Inserisci valore per VERDE\n");
+                //UART_PutString("Inserisci valore per VERDE\n");
                 Timer_Start();
                 count_TIMER = 0;
                 red_received ++;
@@ -97,11 +94,11 @@ int main(void)
                 
             }
             
-             else if((red_received) && (flag) && (count_TIMER < 10))
+             else if((red_received) && (flag) && (count_TIMER < 5))
             {
                 
                 DC_GREEN = received;
-                UART_PutString("Inserisci valore per BLU\n");
+                //UART_PutString("Inserisci valore per BLU\n");
                 Timer_Start();
                 count_TIMER = 0;
                 green_received ++;
@@ -111,11 +108,11 @@ int main(void)
               
             }
             
-            else if((green_received) && (flag)&&(count_TIMER < 10))
+            else if((green_received) && (flag)&&(count_TIMER < 5))
             {
                
                DC_BLUE = received;
-               UART_PutString("Inserisci valore di Stop\n");
+               //UART_PutString("Inserisci valore di Stop\n");
                Timer_Start();
                count_TIMER = 0;
                blue_received ++;
@@ -124,11 +121,11 @@ int main(void)
                 
             }
             
-            else if((blue_received) && (received == 0xC0) &&(flag)&&(count_TIMER < 10))
+            else if((blue_received) && (received == 0xC0) &&(flag)&&(count_TIMER < 5))
             {
                 
                 Timer_Stop();
-                UART_PutString("Inserisci valore di Start\n");
+                //UART_PutString("Inserisci valore di Start\n");
                 stop_received ++;
                 blue_received = 0;
                 flag = 0;
@@ -144,11 +141,17 @@ int main(void)
                 UART_PutChar(DC_BLUE);
             }
             
-            /*else if(((flag)&&(received != 0xA0) && (stop_received))||((blue_received) && (received != 0xC0)&&(flag)) )
+            else if((flag) && (received != 0xA0) && (stop_received))
             {
                 UART_PutString("Errore\n");
                 flag = 0;
-            }*/
+            }
+            
+            else if((blue_received) && (received != 0xC0)&&(flag))
+            {
+                UART_PutString("Errore\n");
+                flag = 0;
+            }
             
        
         }   
