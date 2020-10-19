@@ -9,14 +9,15 @@
  *
  * ========================================
 */
+
 #ifndef __INTERRUPT_ROUTINES_H
     #define __INTERRUPT_ROUTINES_H
     
     #include "cytypes.h"
     
     
-    CY_ISR_PROTO(Custom_UART_ISR);
-    CY_ISR_PROTO(Custom_TIMER_ISR);
+    CY_ISR_PROTO(Custom_UART_ISR); // dichiarazione del ISR dell'UART
+    CY_ISR_PROTO(Custom_TIMER_ISR); // dichiarazione del ISR del Timer
     
 #endif
 /* [] END OF FILE */
